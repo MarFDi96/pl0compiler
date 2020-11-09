@@ -1,57 +1,30 @@
-const MIN = -10000, max=10000;
-
-var A,B,C,W,X,Y,Z;
-
-procedure MOSTRAR;
-
+const k1 = 3, K2 = 0, K3 = -2;
+var n1, n2, n3, pe, cont;
+procedure perrin;
 begin
-
-IF Y = 0 THEN WRITELN ('HAY UNA RAIZ EN X=', X);
-
-W := 1
-
+pe := n1 + n2;
+n1 := n2;
+n2 := n3;
+n3 := pe
 end;
-
 begin
-
-WRITELN;
-
-WRITELN ('PROGRAMA PARA BUSCAR RAICES ENTERAS DE ECUACIONES CUADRATICAS');
-
-WRITELN;
-
-WRITELN (' 2');
-
-WRITELN ('A X + B X + C = 0');
-
-WRITELN;
-
-write ('Ingrese A: '); readLn (A);
-
-write ('Ingrese B: '); readLn (b);
-
-write ('Ingrese C: '); readLn (c);
-
-WRITELN;
-
-x := min;
-
-W := 0;
-
-while x <= max do
-
+write ('3 0 2 ');
+N1 := K1;
+n2 := k2;
+n3 := -k3;
+cont := 0;
+while k1 + k3 -1 = K2 do
 begin
-
-z := x - 1;
-
-y := a * sqr(z+1) + B * x + c;
-
-if y = 0 then call MOSTRAR;
-
-x := x + 1
-
+call perrin;
+if cont > 14
+then begin
+writeln;
+halt
+end
+else begin
+write (pe, ' ');
+cont := cont + 1
+end
 end;
-
-if W = 0 then writeln ('NO HAY RAICES ENTERAS ENTRE ', MIN, ' Y ', MAX)
-
+writeln ('Esta linea nunca se ejecuta')
 end.

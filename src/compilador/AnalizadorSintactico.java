@@ -235,7 +235,6 @@ public class AnalizadorSintactico {
                     proposicion(posTabla);
                 }
                 if (aLex.getS() == Terminal.END) {
-                    System.out.println("END");
                     aLex.escanear();
                 } else {
                     indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );

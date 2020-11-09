@@ -7,113 +7,46 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
 public class GeneradorDeCodigo {
 
     private final byte memoria[];
     private int topeMemoria;
     private final String nombre;
-    private final String nombreL;
     private DataOutputStream bwe;
     private final IndicadorDeErrores indicadorDeErrores;
 
     public GeneradorDeCodigo(String nomArch, IndicadorDeErrores indicadorDeErrores) {
         this.memoria = new byte[Constantes.MAX_TAM_MEMORIA];
         this.indicadorDeErrores = indicadorDeErrores;
+        String operatingSystem = System.getProperty("os.name").toLowerCase();
+        if (operatingSystem.contains("win")) {
             nombre = (nomArch.indexOf('.') == -1 ? nomArch : nomArch.substring(0, nomArch.lastIndexOf('.'))) + ".exe";
-            nombreL = (nomArch.indexOf('.') == -1 ? nomArch : nomArch.substring(0, nomArch.lastIndexOf('.'))) + ".ELF";
+        } else {
+            nombre = (nomArch.indexOf('.') == -1 ? nomArch : nomArch.substring(0, nomArch.lastIndexOf('.'))) + ".ELF";
+        }
         try {
             bwe = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombre)));
-            bwe = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreL)));
         } catch (FileNotFoundException ex) {
-            indicadorDeErrores.mostrar(Errores.EXCEPCION_DE_ENTRADA_SALIDA, ex.getMessage());
+            indicadorDeErrores.mostrar(25, ex.getMessage());
         }
 
         cargarBloqueFijo();
-        
     }
 
-    public void setTopeMemoria(int topeMemoria) {
-        this.topeMemoria = topeMemoria;
-    }
-    
-    
-    
-    public void cargarBytes(int... intBytes){ //de esta manera puedo cargar la cantidad de bytes que quiera
-        int i = 0;
-        while(i < intBytes.length) {
-            cargarByte(intBytes[i]);
-            i++;
-        }
-    }
-    
-    public void cargarEnteros(int... enteros){
-        int i = 0;
-        while(i < enteros.length){
-            cargarEntero(enteros[i]);
-            i++;
-        }
-    }
-    
-    public void cargarByte(int intByte){
-        this.memoria[topeMemoria++] = (byte) intByte;
-    }
-    
-    public void cargarByte(int intByte, int posicion){
-        this.memoria[posicion] = (byte) intByte;
-    }
-    
-    public void cargarEntero(int i, int posicion){
-            long l = i;
-
-        if (l < 0)
-           l = i + 0x100000000L;
-
-        byte primerByte = (byte) (l % 256);
-        cargarByte(primerByte, posicion++);  
-        
-        byte segundoByte = (byte) (l >> 8 % 256);
-        cargarByte(segundoByte, posicion++);
-        
-        byte tercerByte = (byte) (l >> 16 % 256);
-        cargarByte(tercerByte, posicion++);
-        
-        byte cuartoByte = (byte) (l >> 24 % 256);
-        cargarByte(cuartoByte, posicion++);
-    }
-    
-    public void cargarEntero(int i){
-        long l = i;
-
-        if (l < 0)
-           l = i + 0x100000000L;
-
-        memoria[topeMemoria++] = (byte) (l % 256);
-        memoria[topeMemoria++] = (byte) (l >> 8 % 256);
-        memoria[topeMemoria++] = (byte) (l >> 16 % 256);
-        memoria[topeMemoria++] = (byte) (l >> 24 % 256);
-    }
-    
-    public int obtenerEntero(int posicionMemoria){
-       int b1 = 0x000000FF & memoria[posicionMemoria];
-       int b2 = 0x0000FF00 & memoria[posicionMemoria + 1] << 8;
-       int b3 = 0x00FF0000 & memoria[posicionMemoria + 2] << 16;
-       int b4 = 0xFF000000 & memoria[posicionMemoria + 3] << 24;
-       return b1 + b2 + b3 + b4;
-    }
-    
     public void volcar() {
         for (int i = 0; i < topeMemoria; i++) {
             try {
                 bwe.writeByte(memoria[i]);
             } catch (IOException ex) {
-                indicadorDeErrores.mostrar(Errores.EXCEPCION_DE_ENTRADA_SALIDA, ex.getMessage());
+                indicadorDeErrores.mostrar(25, ex.getMessage());
+                System.exit(1);
             }
         }
         try {
             bwe.close();
         } catch (IOException ex) {
-                indicadorDeErrores.mostrar(Errores.EXCEPCION_DE_ENTRADA_SALIDA, ex.getMessage());
+            indicadorDeErrores.mostrar(25, ex.getMessage());
+            System.exit(1);
         }
     }
 
@@ -124,24 +57,71 @@ public class GeneradorDeCodigo {
             System.gc();
             file.delete();
         } catch (IOException ex) {
-            indicadorDeErrores.mostrar(Errores.EXCEPCION_DE_ENTRADA_SALIDA, ex.getMessage());
+            indicadorDeErrores.mostrar(25, ex.getMessage());
+            System.exit(1);
+        }
+    }
+
+    public void cargarBytes(int... intBytes) { //de esta manera puedo cargar la cantidad de bytes que quiera
+        int i = 0;
+        while (i < intBytes.length) {
+            cargarByte(intBytes[i]);
+            i++;
+        }
+    }
+
+    public void cargarByte(int entero) {
+        memoria[topeMemoria++] = (byte) entero;
+    }
+
+    public void cargarByte(int i, int donde) {
+        memoria[donde] = (byte) i;
+    }
+
+    public void cargarEntero(int i) {
+        long l = i;
+        if (l < 0) {
+            l = i + 0x100000000L;
+        }
+        memoria[topeMemoria++] = (byte) (l % 256);
+        memoria[topeMemoria++] = (byte) (l >> 8 % 256);
+        memoria[topeMemoria++] = (byte) (l >> 16 % 256);
+        memoria[topeMemoria++] = (byte) (l >> 24 % 256);
+    }
+
+    public void cargarEntero(int donde, int i) {
+        long l = i;
+        if (l < 0) {
+            l = i + 0x100000000L;
+        }
+        memoria[donde] = (byte) (i % 256);
+        memoria[donde + 1] = (byte) (l >> 8 % 256);
+        memoria[donde + 2] = (byte) (l >> 16 % 256);
+        memoria[donde + 3] = (byte) (l >> 24 % 256);
+
+    }
+
+    public int getCampo(int pos) {
+        return memoria[pos]
+                + memoria[pos + 1] * 256
+                + memoria[pos + 2] * 256 * 256
+                + memoria[pos + 3] * 256 * 256 * 256;
+    }
+
+    public void cargarPopEax() {
+        if (memoria[topeMemoria - 1] == 0x50) {
+            topeMemoria--;
+        } else {
+            cargarByte(0x58);
         }
     }
 
     private void cargarBloqueFijo() {
         String operatingSystem = System.getProperty("os.name").toLowerCase();
-        if(operatingSystem.contains("win")){
+        if (operatingSystem.contains("win")) {
             cargarBloqueWindows();
-        }else{
+        } else {
             cargarBloqueLinux();
-        }
-    }
-    
-    public void cargarPopEax(){
-        if(memoria[topeMemoria - 1] == 0x50){
-            topeMemoria--;
-        }else{
-            memoria[topeMemoria++] = 0x58;
         }
     }
 
@@ -1301,6 +1281,7 @@ public class GeneradorDeCodigo {
     }
 
     private void cargarBloqueWindows() {
+        topeMemoria = 0;
         memoria[topeMemoria++] = (byte) 0x4D;
         memoria[topeMemoria++] = (byte) 0x5A;
         memoria[topeMemoria++] = (byte) 0x60;
@@ -3098,4 +3079,9 @@ public class GeneradorDeCodigo {
     public int getTopeMemoria() {
         return topeMemoria;
     }
+
+    public void setTopeMemoria(int topeMemoria) {
+        this.topeMemoria = topeMemoria;
+    }
+
 }

@@ -1,66 +1,73 @@
 package compilador;
 
 public class AnalizadorSemantico {
-
     private final IndicadorDeErrores indicadorDeErrores;
     private final IdentificadorBean[] tabla;
+    private int valorVar = 0;
 
     public AnalizadorSemantico(IndicadorDeErrores indicadorDeErrores) {
         this.indicadorDeErrores = indicadorDeErrores;
         this.tabla = new IdentificadorBean[Constantes.MAX_CANT_IDENT];
     }
-
-    public IdentificadorBean[] getTabla() {
-        return tabla;
+    
+       
+    public int proximoValor() {
+        valorVar += 4;
+        return valorVar - 4;
     }
 
-    public void insertarEnTabla(IdentificadorBean bean, int base, int desplazamiento) {
-        /*
-        Para insertar en tabla, buscar que NO esté entre base y base+desplazamiento-1 (Scope local)
-        */
-        if(bean.getTipo().equals(Terminal.CONST) && existeEnTablaInterno(bean, base, base+desplazamiento-1)){
-            indicadorDeErrores.mostrar(Errores.CONSTANTE_DUPLICADA, bean.getNombre());
-        }else{
-            System.out.println("Poniendo en tabla: " + bean);
-            tabla[base + desplazamiento] = bean;
-        }
+    public int getValorVar() {
+        return valorVar;
     }
     
-    private boolean existeEnTablaInterno(IdentificadorBean bean, int inicio, int terminacion){
-        int i = terminacion;
-        boolean existe = false;
-        while(i > inicio){
-            IdentificadorBean ib = tabla[i--];
-            existe = ib.getNombre().equals(bean.getNombre()) && ib.getTipo().equals(bean.getTipo());
-        }
-        return existe;
-    }
-    
-    public IdentificadorBean getIdentificador(int posicion){
-        IdentificadorBean ib = tabla[posicion];
-        return ib;
-    }    
-    
-    public int getIdentificador(String nombre, int base, int desplazamiento){        
-        IdentificadorBean ib = new IdentificadorBean(nombre, null, 0);
-        return existeEnTabla(ib, base, desplazamiento);
-    }
-    
-    public int existeEnTabla(IdentificadorBean bean, int base, int desplazamiento){
-        int i = base+desplazamiento-1;
-        int posicion = -1;
-        while(i >= 0){
-            IdentificadorBean ib = tabla[i];
-            if(ib != null && ib.getNombre().equals(bean.getNombre())){
-                posicion = i;
-                break;
+
+    public IdentificadorBean buscar(String nombre, int desde) {
+        int i = desde;
+        for (i = desde; i >= 0; i--) {
+            if (tabla[i].getNombre().toLowerCase().equals(nombre.toLowerCase())) {
+                return tabla[i];
             }
-            i--;
         }
-        if(posicion == -1){
-            indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_NO_DECLARADO, bean.getNombre());           
-        }
-        return posicion;
+        return null;
     }
-    
+
+    public void cargarTabla(int indice, String nombre, Terminal tipo, int valor) {
+        IdentificadorBean datosTabla = new IdentificadorBean();
+        datosTabla.setNombre(nombre);
+        datosTabla.setTipo(tipo);
+        datosTabla.setValor(valor);
+        this.tabla[indice] = datosTabla;
+    }
+
+    public void mostrarTabla(int desplazamiento) {
+        for (int i = 0; i <= desplazamiento; i++) {
+            System.out.println("nombre: " + this.tabla[i].getNombre());
+            System.out.println("tipo: " + this.tabla[i].getTipo());
+            System.out.println("valor: " + this.tabla[i].getValor());
+            System.out.println("~~~~~");
+        }
+    }
+
+    public void buscarDuplicado(String nombre, int desde, int hasta) {
+        int i = desde;
+        for (i = desde; i < hasta; i++) {
+            if (nombre.equals(this.tabla[i].getNombre())) {
+                indicadorDeErrores.mostrar(16, nombre);
+            }
+        }
+    }
+
+    public void buscarDeclaracion(String nombre, int desde) {
+        int i = desde;
+        boolean encontro = false;
+        for (i = desde; i >= 0; i--) {
+            if (nombre.toLowerCase().equals(this.tabla[i].getNombre().toLowerCase())) {
+                encontro = true;
+            }
+        }
+        if (encontro == false) {
+            indicadorDeErrores.mostrar(17, nombre);
+        }
+    }
+
 }

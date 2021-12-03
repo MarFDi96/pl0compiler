@@ -33,8 +33,7 @@ public class AnalizadorSintactico {
             int aux = genCod.getTopeMemoria() + 4;
             genCod.cargarEntero(0x588 - aux);
             genCod.cargarEntero(0x701, genCod.getCampo(212) + genCod.getCampo(200) - 0x700 + genCod.getTopeMemoria());
-            for (int i = 0; i < aSem.getValorVar() / 4; i++)
-            {
+            for (int i = 0; i < aSem.getValorVar() / 4; i++) {
                 genCod.cargarEntero(0);
             }
             int tamSeccionText = genCod.getTopeMemoria() - 0x200;
@@ -86,7 +85,7 @@ public class AnalizadorSintactico {
                                 aSem.buscarDuplicado(nombre, base, base + desplazamiento - 1);
                                 aLex.escanear();
                             } else {
-                                indicadorDeErrores.mostrar(Errores.NUMERO_ESPERADO, aLex.getCad() );
+                                indicadorDeErrores.mostrar(Errores.NUMERO_ESPERADO, aLex.getCad());
                             }
                         } else {
                             if (aLex.getS() == Terminal.NUMERO) {
@@ -97,21 +96,21 @@ public class AnalizadorSintactico {
                                 aSem.buscarDuplicado(nombre, base, base + desplazamiento - 1);
                                 aLex.escanear();
                             } else {
-                                indicadorDeErrores.mostrar(Errores.NUMERO_ESPERADO, aLex.getCad() );
+                                indicadorDeErrores.mostrar(Errores.NUMERO_ESPERADO, aLex.getCad());
                             }
                         }
                     } else {
-                        indicadorDeErrores.mostrar(Errores.IGUAL_ESPERADO, aLex.getCad() );
+                        indicadorDeErrores.mostrar(Errores.IGUAL_ESPERADO, aLex.getCad());
                     }
                 } else {
-                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad());
                 }
             } while (aLex.getS() == Terminal.COMA);
 
             if (aLex.getS() == Terminal.PUNTO_Y_COMA) {
                 aLex.escanear();
             } else {
-                indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );
+                indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad());
             }
         }
         if (aLex.getS() == Terminal.VAR) {
@@ -126,14 +125,14 @@ public class AnalizadorSintactico {
                     aSem.buscarDuplicado(nombre, base, base + desplazamiento - 1);
                     aLex.escanear();
                 } else {
-                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad());
                 }
             } while (aLex.getS() == Terminal.COMA);
 
             if (aLex.getS() == Terminal.PUNTO_Y_COMA) {
                 aLex.escanear();
             } else {
-                indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );
+                indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad());
             }
         }
         if (aLex.getS() == Terminal.PROCEDURE) {
@@ -154,13 +153,13 @@ public class AnalizadorSintactico {
                         if (aLex.getS() == Terminal.PUNTO_Y_COMA) {
                             aLex.escanear();
                         } else {
-                            indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );
+                            indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad());
                         }
                     } else {
-                        indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );
+                        indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad());
                     }
                 } else {
-                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad());
                 }
             }
         }
@@ -182,17 +181,15 @@ public class AnalizadorSintactico {
                 aux = aSem.buscar(aLex.getCad(), posTabla);
 
                 if (aux == null) {
-                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_NO_DECLARADO, aLex.getCad() );
-                }
-                else if (aux.getTipo() != Terminal.VAR) {
+                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_NO_DECLARADO, aLex.getCad());
+                } else if (aux.getTipo() != Terminal.VAR) {
                     if (aux.getTipo() == Terminal.PROCEDURE) {
                         System.out.println(" Se esperaba un CALL");
                         indicadorDeErrores.mostrar(Errores.ERROR_GENERICO, aLex.getCad());
-                    }
-                    else {
+                    } else {
                         System.out.println(" Error en el tipo de identificador");
                         indicadorDeErrores.mostrar(Errores.ERROR_GENERICO, aLex.getCad());
-                    } 
+                    }
                 }
 
                 aLex.escanear();
@@ -224,7 +221,7 @@ public class AnalizadorSintactico {
                     genCod.cargarEntero(aux.getValor() - (genCod.getTopeMemoria() + 4));
                     aLex.escanear();
                 } else {
-                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad());
                 }
                 break;
             case BEGIN:
@@ -235,9 +232,10 @@ public class AnalizadorSintactico {
                     proposicion(posTabla);
                 }
                 if (aLex.getS() == Terminal.END) {
+                    System.out.println("END");
                     aLex.escanear();
                 } else {
-                    indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.PUNTO_Y_COMA_ESPERADO, aLex.getCad());
                 }
                 break;
             case IF:
@@ -246,20 +244,23 @@ public class AnalizadorSintactico {
                 libreAnt = genCod.getTopeMemoria();
                 if (aLex.getS() == Terminal.THEN) {
                     aLex.escanear();
-                    proposicion(posTabla);                    
-                } else {
-                    indicadorDeErrores.mostrar(Errores.THEN_ESPERADO, aLex.getCad() );
-                }                
-                
-                librePost = genCod.getTopeMemoria();
-                
-                  if (aLex.getS() == Terminal.ELSE) { //literalmente otro then
-                    aLex.escanear();
                     proposicion(posTabla);
+                    genCod.cargarBytes(0xE9,0x00,0x00,0x00,0x00); //genero un salto si la condición es false
+
+                    librePost = genCod.getTopeMemoria();
+                    genCod.cargarEntero(libreAnt - 4, (genCod.getTopeMemoria() - libreAnt)); //salto del else     
+                    
+                    if (aLex.getS() == Terminal.ELSE) {
+                        aLex.escanear();
+                        proposicion(posTabla);
+                        //librePost = genCod.getTopeMemoria();
+                    }
+                    
+                    genCod.cargarEntero(libreAnt - 4, librePost - libreAnt); //salto del then
                 } else {
-                    indicadorDeErrores.mostrar(Errores.ELSE_ESPERADO, aLex.getCad() );
+                    indicadorDeErrores.mostrar(Errores.THEN_ESPERADO, aLex.getCad());
                 }
-                genCod.cargarEntero(libreAnt - 4, librePost - libreAnt);
+
                 break;
             case WHILE:
                 aLex.escanear();
@@ -288,8 +289,7 @@ public class AnalizadorSintactico {
 
                             if (aux == null) {
                                 indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_NO_DECLARADO, aLex.getCad());
-                            }
-                            else if (aux.getTipo() != Terminal.VAR) {
+                            } else if (aux.getTipo() != Terminal.VAR) {
                                 indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_NO_DECLARADO, aLex.getCad());
                             }
                             genCod.cargarByte(0xE8);
@@ -300,7 +300,7 @@ public class AnalizadorSintactico {
                             aLex.escanear();
 
                         } else {
-                            indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad() );
+                            indicadorDeErrores.mostrar(Errores.IDENTIFICADOR_ESPERADO, aLex.getCad());
                         }
                     } while (aLex.getS() == Terminal.COMA);
                 } else {
@@ -349,7 +349,7 @@ public class AnalizadorSintactico {
                 } else {
                     indicadorDeErrores.mostrar(2, "");
                 }
-                                 
+
                 break;
             case WRITELN:
                 aLex.escanear();
@@ -426,93 +426,92 @@ public class AnalizadorSintactico {
             aLex.escanear();
             System.out.println("CONDICION: Escaneo = " + aLex.getCad());
             expresion(posTabla);
-            genCod.cargarPopEax(); 
-            genCod.cargarByte(0xA8); 
-            genCod.cargarByte(0x01); 
-            genCod.cargarByte(0x7B); 
+            genCod.cargarPopEax();
+            genCod.cargarByte(0xA8);
+            genCod.cargarByte(0x01);
+            genCod.cargarByte(0x7B);
             genCod.cargarByte(0x05);
             genCod.cargarByte(0xE9);
             genCod.cargarEntero(0);
         } else {
             expresion(posTabla);
 
-                switch (aLex.getS()) {
-                    case IGUAL:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x74);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    case DISTINTO:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x75);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    case MENOR:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x7C);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    case MENOR_IGUAL:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x7E);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    case MAYOR:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x7F);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    case MAYOR_IGUAL:
-                        aLex.escanear();
-                        expresion(posTabla);
-                        genCod.cargarPopEax();
-                        genCod.cargarByte(0x5B);
-                        genCod.cargarByte(0x39);
-                        genCod.cargarByte(0xC3);
-                        genCod.cargarByte(0x7D);
-                        genCod.cargarByte(0x05);
-                        genCod.cargarByte(0xE9);
-                        genCod.cargarEntero(0);
-                        break;
-                    default:
-                        break;
-                }
-            
+            switch (aLex.getS()) {
+                case IGUAL:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x74);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                case DISTINTO:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x75);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                case MENOR:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x7C);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                case MENOR_IGUAL:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x7E);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                case MAYOR:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x7F);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                case MAYOR_IGUAL:
+                    aLex.escanear();
+                    expresion(posTabla);
+                    genCod.cargarPopEax();
+                    genCod.cargarByte(0x5B);
+                    genCod.cargarByte(0x39);
+                    genCod.cargarByte(0xC3);
+                    genCod.cargarByte(0x7D);
+                    genCod.cargarByte(0x05);
+                    genCod.cargarByte(0xE9);
+                    genCod.cargarEntero(0);
+                    break;
+                default:
+                    break;
+            }
 
         }
     }
@@ -549,7 +548,7 @@ public class AnalizadorSintactico {
                 genCod.cargarByte(0x50);
             }
             if (operacion.equals("MENOS")) {
-                genCod.cargarPopEax(); 
+                genCod.cargarPopEax();
                 genCod.cargarByte(0x5B);
                 genCod.cargarByte(0x93);
                 genCod.cargarByte(0x29);
@@ -575,7 +574,7 @@ public class AnalizadorSintactico {
                     genCod.cargarByte(0x50);
                     break;
                 case DIVIDIDO:
-                    genCod.cargarPopEax(); 
+                    genCod.cargarPopEax();
                     genCod.cargarByte(0x5B);
                     genCod.cargarByte(0x93);
                     genCod.cargarByte(0x99);

@@ -3,7 +3,7 @@ package compilador;
 enum Terminal {
 
     IF, CALL, CADENA_LITERAL, NUMERO, ASIGNACION, NULO, IDENTIFICADOR, EOF, MAS,
-    CONST, VAR, PROCEDURE, BEGIN, END, THEN, WHILE, DO, ODD, MENOS, POR,
+    CONST, VAR, PROCEDURE, BEGIN, END, HALT, THEN, ELSE, WHILE, DO, ODD, MENOS, POR,
     DIVIDIDO, IGUAL, COMA, PUNTO_Y_COMA, MAYOR, MENOR, MENOR_IGUAL, MAYOR_IGUAL,
     DISTINTO, PUNTO, READLN, WRITELN, WRITE, ABRE_PARENTESIS, CIERRA_PARENTESIS
 }
@@ -55,8 +55,6 @@ whiteSpace = {lineTerminator} | [ \t\f]
 ":="			{s = Terminal.ASIGNACION; return s;}
 
 /* operadores */
-/* "sqr"			{s = Terminal.RAIZCUADRADA; return s;}*/
-/* "^"				{s = Terminal.CUADRADO; return s;}*/
 "+"				{s = Terminal.MAS; return s;}
 "-"				{s = Terminal.MENOS; return s;}
 "*"				{s = Terminal.POR; return s;}
@@ -85,6 +83,8 @@ while			{s = Terminal.WHILE; return s;}
 readln			{s = Terminal.READLN; return s;}
 write			{s = Terminal.WRITE; return s;}
 writeln			{s = Terminal.WRITELN; return s;}
+halt			{s = Terminal.HALT; return s;}
+else			{s = Terminal.ELSE; return s;}
 
 /* otros simbolos terminales */
 {numero}		{s = Terminal.NUMERO; return s;}

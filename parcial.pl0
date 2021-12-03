@@ -8,6 +8,7 @@ n2 := n3;
 n3 := pe
 end;
 begin
+writeln ('Esta linea nunca se ejecuta');
 write ('3 0 2 ');
 N1 := K1;
 n2 := k2;
